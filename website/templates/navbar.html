@@ -22,6 +22,10 @@
           </li>
           {% endif %}
         </ul>
+        <form class="d-flex" method="GET" action="{% url 'search_record' %}">
+          <input class="form-control me-2" type="search" name="searched" placeholder="Search by Name" aria-label="Search">
+          <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
       </div>
     </div>
   </nav>

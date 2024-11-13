@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, AddRecordForm
 from .models import Record
+from django.db.models import Q
 
 def home(request):
     records = Record.objects.all()
@@ -91,3 +92,16 @@ def update_record(request, pk):
     else:
         messages.success(request, "You Must Be Logged In ....")
         return redirect('home')
+    
+def search_record(request):
+    if not request.user.is_authenticated:
+        messages.warning(request, "You must be logged in to use the search feature.")
+        return redirect('home')
+    searched = request.GET.get('searched', '')
+    records = []
+
+    if searched:
+        records = Record.objects.filter(
+            Q(first_name__icontains=searched) | Q(last_name__icontains=searched)
+        )
+    return render(request, 'search_record.html', {'searched': searched, 'records': records})
